@@ -24,4 +24,13 @@ int esta_valido(Item item) {
 
     return meses_passados < item.shelf_life ? 1 : 0;
 }
+void imprime_item(Item item) {
+    printf("Part Number: %d\n", item.part_number);
+    printf("Descricao: %s\n", item.descricao);
+    printf("Data de Entrada: %s\n", item.data_entrada);
+    printf("Localizacao: %s\n", item.localizacao);
+    printf("Shelf Life (meses): %d\n", item.shelf_life);
+    printf("Flag: %s\n", item.flag == 1 ? "Liberado" : "Retido");
+    printf("Quantidade: %d\n", item.quantidade);
+}
 

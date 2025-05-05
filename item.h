@@ -13,5 +13,7 @@ typedef struct {
 
 int esta_valido(Item item);
 
+void imprime_item(Item item);
+
 #endif
 

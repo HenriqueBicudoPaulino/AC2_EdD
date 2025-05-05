@@ -9,10 +9,13 @@ int lista_vazia(Lista *l) { return *l == NULL; }
 
 NoLista *busca_lista(Lista *l, int part_number) {
   NoLista *aux = *l;
-  while (aux && aux->part_number != part_number) {
+  while (aux && aux->part_number < part_number) {
     aux = aux->prox;
   }
-  return aux;
+  if (aux && aux->part_number == part_number) {
+        return aux;
+	}
+  return NULL;
 }
 
 int insere_ordenado_lista(Lista *l, int part_number, Item item) {
