@@ -15,5 +15,6 @@ int esta_valido(Item item);
 
 void imprime_item(Item item);
 
-#endif
+int valida_localizacao(char *localizacao);
 
+#endif
