@@ -20,10 +20,20 @@ int esta_valido(Item item) {
     
     int mes_atual = data_atual->tm_mon + 1;
 
-    int meses_passados = (ano_atual - ano) * 12 + (mes_atual - mes);
-
-    return meses_passados < item.shelf_life ? 1 : 0;
+    // Ajuste para considerar o dia
+    int expired = 0;
+    if (ano_atual > ano) {
+        expired = (ano_atual - ano) * 12 + mes_atual - mes > item.shelf_life;
+    } else if (ano_atual == ano) {
+        if (mes_atual > mes) {
+            expired = mes_atual - mes > item.shelf_life;
+        } else if (mes_atual == mes) {
+            expired = data_atual->tm_mday > dia;
+        }
+    }
+    return !expired;
 }
+
 void imprime_item(Item item) {
     printf("Part Number: %d\n", item.part_number);
     printf("Descricao: %s\n", item.descricao);
@@ -34,3 +44,10 @@ void imprime_item(Item item) {
     printf("Quantidade: %d\n", item.quantidade);
 }
 
+int valida_localizacao(char *localizacao) {
+    if (strlen(localizacao) != 3) return 0;
+    if (localizacao[0] < 'A' || localizacao[0] > 'D') return 0;
+    if (localizacao[1] < 'A' || localizacao[1] > 'T') return 0;
+    if (localizacao[2] < '1' || localizacao[2] > '5') return 0;
+    return 1;
+}
