@@ -16,7 +16,7 @@ void menu(Lista *lista, Arvore *arvore) {
             case 1:
                 printf("Digite o Part Number: ");
                 scanf("%d", &part_number);
-
+				
                 ini = clock();
                 busca_lista(lista, part_number);
                 fim = clock();

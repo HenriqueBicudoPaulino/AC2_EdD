@@ -14,11 +14,17 @@ typedef struct {
 } Fila;
 
 void cria_fila(Fila *f);
+
 int fila_vazia(Fila *f);
+
 int enfileira(Fila *f, Item i);
+
 int desenfileira(Fila *f, Item *i);
+
 void exibe_fila(Fila *f);
+
 void libera_fila(Fila *f);
+
 Item *busca_na_fila(Fila *f, int quantidade_necessaria);
 
 #endif
