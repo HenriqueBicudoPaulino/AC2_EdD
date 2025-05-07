@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "interface.h"
-#include "item.h"  // Para imprime_item e valida_localizacao
+#include "item.h"
 
 void menu(Lista *lista, Arvore *arvore) {
     int opcao;
@@ -9,7 +9,7 @@ void menu(Lista *lista, Arvore *arvore) {
     clock_t ini, fim;
     int part_number, quantidade;
 
-    do {
+    do {	
         printf("========================================\n");
 		printf("                 MENU                   \n");
 		printf("========================================\n");
@@ -21,7 +21,9 @@ void menu(Lista *lista, Arvore *arvore) {
 		printf("Selecione uma opcao: ");
 
         scanf("%d", &opcao);
-
+        
+		NoArvore *resultado;
+		
         switch (opcao) {
             case 1:
                 printf("\nDigite o Part Number: ");
@@ -83,33 +85,60 @@ void menu(Lista *lista, Arvore *arvore) {
                 break;
 
             case 3:
-                printf("\nDigite Part Number e Quantidade a Utilizar: ");
-                scanf("%d %d", &part_number, &quantidade);
-				
-                ini = clock();
-                utiliza_item_lista(lista, part_number, quantidade);
-                fim = clock();
-                printf("\nUtilizado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
-
-                ini = clock();
-                utiliza_item_arvore(arvore, part_number, quantidade);
-                fim = clock();
-                printf("Utilizado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+                printf("\nDigite Part Number:");
+                scanf("%d", &part_number);
+                resultado = busca_arvore(arvore, part_number);
+				if (resultado && resultado->fila_lotes.inicio) {
+					Item result = resultado->fila_lotes.inicio->dado;
+					printf("Esse item possui %d unidades.",result.quantidade);
+					
+					printf("\nDigite a Quantidade a ser utilizada: ");
+	                scanf("%d", &quantidade);
+	                
+	                ini = clock();
+	                utiliza_item_lista(lista, part_number, quantidade);
+	                fim = clock();
+	                printf("\nUtilizado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+	
+	                ini = clock();
+	                utiliza_item_arvore(arvore, part_number, quantidade);
+	                fim = clock();
+	                printf("Utilizado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+	                
+	                result = resultado->fila_lotes.inicio->dado;
+	                printf("Nova quantidade: %d\n", result.quantidade);
+            	}
+            	else{
+            		printf("Item nao encontrado ou fila vazia.\n");
+				}
                 break;
 
             case 4:
-                printf("\nDigite Part Number e Quantidade a Descartar: ");
-                scanf("%d %d", &part_number, &quantidade);
-
-                ini = clock();
-                descarta_item_lista(lista, part_number, quantidade);
-                fim = clock();
-                printf("\nDescartado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
-
-                ini = clock();
-                descarta_item_arvore(arvore, part_number, quantidade);
-                fim = clock();
-                printf("Descartado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+                printf("\nDigite o Part Number: ");
+                scanf("%d", &part_number);
+                resultado = busca_arvore(arvore, part_number);
+				if (resultado && resultado->fila_lotes.inicio) {
+	    			Item result = resultado->fila_lotes.inicio->dado;
+					printf("Esse item possui %d unidades.",result.quantidade);
+                    printf("\nDigite a quantidade a ser descartada: ");
+                	scanf("%d", &quantidade);
+                	ini = clock();
+	                descarta_item_lista(lista, part_number, quantidade);
+	                fim = clock();
+	                printf("\nDescartado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+	
+	                ini = clock();
+	                descarta_item_arvore(arvore, part_number, quantidade);
+	                fim = clock();
+	                printf("Descartado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+	                
+	                result = resultado->fila_lotes.inicio->dado;
+	                printf("Nova quantidade: %d\n", result.quantidade);
+				}
+				else{
+					printf("Item nao encontrado ou fila vazia.\n");
+				}
+                
                 break;
 
             case 0:
