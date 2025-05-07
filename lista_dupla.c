@@ -14,7 +14,7 @@ NoLista *busca_lista(Lista *l, int part_number) {
   }
   if (aux && aux->part_number == part_number) {
         return aux;
-	}
+  }
   return NULL;
 }
 
@@ -50,9 +50,8 @@ int utiliza_item_lista(Lista *l, int part_number, int quantidade) {
     return 0;
   NoFila *aux = no->fila_lotes.inicio;
   while (aux && quantidade > 0) {
-    if (aux->dado.flag == 1) {
-      int usar = (aux->dado.quantidade < quantidade) ? aux->dado.quantidade
-                                                     : quantidade;
+    if (aux->dado.flag == 1 && esta_valido(aux->dado)) {
+      int usar = (aux->dado.quantidade < quantidade) ? aux->dado.quantidade : quantidade;
       aux->dado.quantidade -= usar;
       quantidade -= usar;
     }
@@ -83,4 +82,3 @@ void libera_lista(Lista *l) {
     free(aux);
   }
 }
-

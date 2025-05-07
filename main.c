@@ -1,15 +1,21 @@
 #include "interface.h"
+#include "lista_dupla.h"
+#include "arvore.h"
 
 int main() {
-  Lista lista;
-  Arvore arvore;
-  cria_lista(&lista);
-  cria_arvore(&arvore);
+    Lista lista;       // Lista duplamente encadeada
+    Arvore arvore;     // Árvore binária de busca
 
-  menu(&lista, &arvore);
+    // Inicializa as estruturas de dados
+    cria_lista(&lista);
+    cria_arvore(&arvore);
 
-  libera_lista(&lista);
-  libera_arvore(&arvore);
+    // Chama o menu para interagir com o usuário
+    menu(&lista, &arvore);
 
-  return 0;
+    // Libera a memória alocada
+    libera_lista(&lista);
+    libera_arvore(&arvore);
+
+    return 0;
 }
