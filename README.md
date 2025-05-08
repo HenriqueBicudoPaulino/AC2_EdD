@@ -9,6 +9,7 @@ This tool was created to manage the quantity and batch of items in a company's i
 - [Overview](#overview)
 - [Features](#features)
 - [Libraries Used](#libraries-used)
+- [Compilation & Execution Guide](#project-compilation-guide)
 
 ---
 
@@ -51,3 +52,28 @@ The system allows for **inserting**, **using**, **discarding**, and **searching*
 - `stdlib.h` – For dynamic memory allocation.
 - `string.h` – For string manipulation (descriptions and location).
 - `time.h` – For date control and item expiration.
+
+---
+
+## Project Compilation Guide
+
+### Requirements
+
+- GCC compiler
+- C99 standard support
+
+### Compilation
+
+To compile the project, use the following command:
+
+```bash
+gcc -std=c99 -Wall -Wextra *.c -o main
+```
+
+### Execution
+
+To run the project just use:
+
+```bash
+./main
+```
