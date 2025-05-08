@@ -4,15 +4,15 @@
 #include <time.h>
 #include "interface.h"
 #include "item.h"
-#include "lista_localizacoes.h"
+#include "fila_localizacoes.h"
 
 void menu(Lista *lista, Arvore *arvore) {
     int opcao, part_number, quantidade;
     clock_t ini, fim;
     Item novo;
-    ListaLocalizacoes lista_loc;
+    FilaLocalizacoes fila_loc;
 
-    cria_lista_localizacoes(&lista_loc);
+    cria_fila_localizacoes(&fila_loc);
 
     do {	
         printf("========================================\n");
@@ -41,7 +41,7 @@ void menu(Lista *lista, Arvore *arvore) {
                 printf("\nExibindo Estoque na Arvore:\n");
                 exibe_arvore(*arvore);
                 printf("\nExibindo Estoque por Localizacao:\n");
-                exibe_lista_localizacoes(&lista_loc);
+                exibe_fila_localizacoes(&fila_loc);
         	break;
 
             case 2:
@@ -128,8 +128,8 @@ void menu(Lista *lista, Arvore *arvore) {
                 fim = clock();
                 printf("Inserido na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
                 
-                // Inserir na lista de localizações
-                insere_lista_localizacoes(&lista_loc, novo.localizacao, novo);
+                // Inserir na fila de localizações
+                insere_fila_localizacoes(&fila_loc, novo.localizacao, novo);
 
             break;
 
