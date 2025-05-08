@@ -4,6 +4,7 @@
 #include <time.h>
 #include "interface.h"
 #include "item.h"
+#include "lista_localizacoes.h"
 
 
 void menu(Lista *lista, Arvore *arvore) {
@@ -11,8 +12,10 @@ void menu(Lista *lista, Arvore *arvore) {
     Item novo;
     clock_t ini, fim;
     int part_number, quantidade;
+    ListaLocalizacoes lista_loc;
+    cria_lista_localizacoes(&lista_loc);
 
-    do {	
+    do {    
         printf("========================================\n");
 		printf("                 MENU                   \n");
 		printf("========================================\n");
@@ -26,9 +29,10 @@ void menu(Lista *lista, Arvore *arvore) {
 
         scanf("%d", &opcao);
         
-		NoArvore *resultado;
-		
+        NoArvore *resultado;
+        
         switch (opcao) {
+<<<<<<< HEAD
         	case 1:
         		system("cls");
             	printf("========================================\n");
@@ -42,9 +46,21 @@ void menu(Lista *lista, Arvore *arvore) {
 				printf("                BUSCAR                  \n");
 				printf("========================================\n");
 				
+=======
+            case 1:
+                printf("\nExibindo Estoque na Lista:\n");
+                exibe_lista(lista);
+                printf("\nExibindo Estoque na Arvore:\n");
+                exibe_arvore(*arvore);
+                printf("\nExibindo Estoque por Localizacao:\n");
+                exibe_lista_localizacoes(&lista_loc);
+                break;
+
+            case 2:
+>>>>>>> c24a18d7cd7db73c7391319f0a793d54e1531ae8
                 printf("\nDigite o Part Number: ");
                 scanf("%d", &part_number);
-				
+                
                 ini = clock();
                 NoLista *resultado_lista = busca_lista(lista, part_number);
                 fim = clock();
@@ -79,6 +95,28 @@ void menu(Lista *lista, Arvore *arvore) {
                         printf("\nLocalizacao invalida. Tente novamente.\n");
                     }
                 } while (!valida_localizacao(novo.localizacao));
+                printf("\nPart Number: "); scanf("%d", &novo.part_number);
+                
+                // Verificar se o Part Number já existe
+                NoLista *existente_lista = busca_lista(lista, novo.part_number);
+                NoArvore *existente_arvore = busca_arvore(arvore, novo.part_number);
+                
+                if (existente_lista && existente_arvore) {
+                    // Assumindo que ambos têm a mesma descrição e localização
+                    strcpy(novo.descricao, existente_lista->fila_lotes.inicio->dado.descricao);
+                    strcpy(novo.localizacao, existente_lista->fila_lotes.inicio->dado.localizacao);
+                    printf("Descricao (preenchida automaticamente): %s\n", novo.descricao);
+                    printf("Localizacao (preenchida automaticamente): %s\n", novo.localizacao);
+                } else {
+                    printf("Descricao: "); scanf("%s", novo.descricao);
+                    do {
+                        printf("Localizacao (Ex: AB1): "); scanf("%s", novo.localizacao);
+                        if (!valida_localizacao(novo.localizacao)) {
+                            printf("\nLocalizacao invalida. Tente novamente.\n");
+                        }
+                    } while (!valida_localizacao(novo.localizacao));
+                }
+                
                 printf("Shelf Life (meses): "); scanf("%d", &novo.shelf_life);
                 printf("Quantidade: "); scanf("%d", &novo.quantidade);
                 
@@ -90,6 +128,12 @@ void menu(Lista *lista, Arvore *arvore) {
 			    snprintf(novo.data_entrada, sizeof(novo.data_entrada), "%02d/%02d/%04d",
              	data_atual->tm_mday, data_atual->tm_mon + 1, data_atual->tm_year + 1900);
              	
+                // Data de entrada como data atual
+                time_t t = time(NULL);
+                struct tm *data_atual = localtime(&t);
+                snprintf(novo.data_entrada, sizeof(novo.data_entrada), "%02d/%02d/%04d",
+                         data_atual->tm_mday, data_atual->tm_mon + 1, data_atual->tm_year + 1900);
+                
                 ini = clock();
                 insere_ordenado_lista(lista, novo.part_number, novo);
                 fim = clock();
@@ -140,35 +184,68 @@ void menu(Lista *lista, Arvore *arvore) {
             	printf("========================================\n");
 				printf("               DESCARTAR                \n");
 				printf("========================================\n");
+                
+                // Inserir na lista de localizações
+                insere_lista_localizacoes(&lista_loc, novo.localizacao, novo);
+                break;
+
+            case 4:
+                printf("\nDigite Part Number:");
+                scanf("%d", &part_number);
+                resultado = busca_arvore(arvore, part_number);
+                if (resultado && resultado->fila_lotes.inicio) {
+                    Item result = resultado->fila_lotes.inicio->dado;
+                    printf("Esse item possui %d unidades.", result.quantidade);
+                    
+                    printf("\nDigite a Quantidade a ser utilizada: ");
+                    scanf("%d", &quantidade);
+                    
+                    ini = clock();
+                    utiliza_item_lista(lista, part_number, quantidade);
+                    fim = clock();
+                    printf("\nUtilizado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+    
+                    ini = clock();
+                    utiliza_item_arvore(arvore, part_number, quantidade);
+                    fim = clock();
+                    printf("Utilizado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+                    
+                    result = resultado->fila_lotes.inicio->dado;
+                    printf("Nova quantidade: %d\n", result.quantidade);
+                } else {
+                    printf("Item nao encontrado ou fila vazia.\n");
+                }
+                break;
+
+            case 5:
                 printf("\nDigite o Part Number: ");
                 scanf("%d", &part_number);
                 resultado = busca_arvore(arvore, part_number);
-				if (resultado && resultado->fila_lotes.inicio) {
-	    			Item result = resultado->fila_lotes.inicio->dado;
-					printf("Esse item possui %d unidades.",result.quantidade);
+                if (resultado && resultado->fila_lotes.inicio) {
+                    Item result = resultado->fila_lotes.inicio->dado;
+                    printf("Esse item possui %d unidades.", result.quantidade);
                     printf("\nDigite a quantidade a ser descartada: ");
-                	scanf("%d", &quantidade);
-                	ini = clock();
-	                descarta_item_lista(lista, part_number, quantidade);
-	                fim = clock();
-	                printf("\nDescartado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
-	
-	                ini = clock();
-	                descarta_item_arvore(arvore, part_number, quantidade);
-	                fim = clock();
-	                printf("Descartado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
-	                
-	                result = resultado->fila_lotes.inicio->dado;
-	                printf("Nova quantidade: %d\n", result.quantidade);
-				}
-				else{
-					printf("Item nao encontrado ou fila vazia.\n");
-				}
-                
+                    scanf("%d", &quantidade);
+                    ini = clock();
+                    descarta_item_lista(lista, part_number, quantidade);
+                    fim = clock();
+                    printf("\nDescartado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+    
+                    ini = clock();
+                    descarta_item_arvore(arvore, part_number, quantidade);
+                    fim = clock();
+                    printf("Descartado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+                    
+                    result = resultado->fila_lotes.inicio->dado;
+                    printf("Nova quantidade: %d\n", result.quantidade);
+                } else {
+                    printf("Item nao encontrado ou fila vazia.\n");
+                }
                 break;
 
             case 0:
                 printf("\n\nEncerrando...\n\n");
+                libera_lista_localizacoes(&lista_loc);
                 break;
         }
     } while (opcao != 0);
