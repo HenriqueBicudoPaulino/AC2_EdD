@@ -36,10 +36,13 @@ void menu(Lista *lista, Arvore *arvore) {
             	printf("========================================\n");
 				printf("                ESTOQUE                 \n");
 				printf("========================================\n");
-        		printf("\nExibindo Estoque na Lista:\n");
+        		
+				printf("\nExibindo Estoque na Lista:\n");
                 exibe_lista(lista);
+                
                 printf("\nExibindo Estoque na Arvore:\n");
                 exibe_arvore(*arvore);
+                
                 printf("\nExibindo Estoque por Localizacao:\n");
                 exibe_fila_localizacoes(&fila_loc);
         	break;
@@ -56,28 +59,19 @@ void menu(Lista *lista, Arvore *arvore) {
                 NoLista *resultado_lista = busca_lista(lista, part_number);
                 fim = clock();
                 printf("\nTempo Lista: %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
-                if (resultado_lista && !fila_vazia(&resultado_lista->fila_lotes)) {
-                    printf("\nItem encontrado na lista:\n");
-                    Item result_lista = resultado_lista->fila_lotes.inicio->dado;
-                    imprime_item(result_lista);
-                } else {
-                    printf("\nItem nao encontrado na lista ou fila vazia.\n");
-                }
 
                 ini = clock();
                 NoArvore *resultado_arvore = busca_arvore(arvore, part_number);
                 fim = clock();
-                printf("\nTempo Arvore: %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
                 printf("Tempo Arvore: %.5lfs\n\n", (double)(fim - ini) / CLOCKS_PER_SEC);
                 
                 if (resultado_arvore && !fila_vazia(&resultado_arvore->fila_lotes)) {
-                    printf("Item encontrado na arvore:\n");
                     printf("Item encontrado:\n");
                     Item result_arvore = resultado_arvore->fila_lotes.inicio->dado;
                     imprime_item(result_arvore);
                 } else {
                     printf("Item nao encontrado na lista ou fila vazia.\n");
-                    printf("Item nao encontrado na arvore ou fila vazia.\n");
+                    printf("Item nao encontrado ou fila vazia.\n");
                 }
             break;
 
@@ -105,9 +99,13 @@ void menu(Lista *lista, Arvore *arvore) {
                         }
                     } while (!valida_localizacao(novo.localizacao));
                 }
-
-                printf("Shelf Life (meses): "); scanf("%d", &novo.shelf_life);
-                printf("Flag (1=liberado / 0=retido): "); scanf("%d", &novo.flag);
+                resultado = busca_arvore(arvore, novo.part_number);
+				if(resultado && !fila_vazia(&resultado->fila_lotes)){
+					novo.shelf_life = resultado->fila_lotes.inicio->dado.shelf_life;
+				}else{
+					printf("Shelf Life (meses): "); scanf("%d", &novo.shelf_life);
+				}
+                
                 printf("Quantidade: "); scanf("%d", &novo.quantidade);
                 
 				novo.flag = 1; // liberado
