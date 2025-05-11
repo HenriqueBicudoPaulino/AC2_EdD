@@ -52,6 +52,7 @@ The system allows for **inserting**, **using**, **discarding**, and **searching*
 - `stdlib.h` – For dynamic memory allocation.
 - `string.h` – For string manipulation (descriptions and location).
 - `time.h` – For date control and item expiration.
+- `ctype.h` – For string treatment(toupper method).
 
 ---
 
