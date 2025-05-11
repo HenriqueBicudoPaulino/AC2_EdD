@@ -46,8 +46,8 @@ void imprime_item(Item item) {
 
 int valida_localizacao(char *localizacao) {
     if (strlen(localizacao) != 3) return 0;
-    if (localizacao[0] < 'A' || localizacao[0] > 'D') return 0;
-    if (localizacao[1] < 'A' || localizacao[1] > 'T') return 0;
-    if (localizacao[2] < '1' || localizacao[2] > '5') return 0;
+    if (localizacao[0] < 'A' || localizacao[0] > 'Z') return 0;
+    if (localizacao[1] < 'A' || localizacao[1] > 'Z') return 0;
+    if (localizacao[2] < '1' || localizacao[2] > '9') return 0;
     return 1;
 }

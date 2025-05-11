@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 #include "interface.h"
 #include "item.h"
 #include "fila_localizacoes.h"
@@ -99,13 +100,40 @@ void menu(Lista *lista, Arvore *arvore) {
                     printf("Localizacao (preenchida automaticamente): %s\n", novo.localizacao);
                     printf("ShelfLife (preenchida automaticamente): %d\n", novo.shelf_life);
                 } else {
-                    printf("Descricao: "); scanf("%s", novo.descricao);
+                    printf("Descricao: ");
+					fgets(novo.descricao, sizeof(novo.descricao), stdin);
+					size_t len = strlen(novo.descricao);
+					if (len > 0 && novo.descricao[len - 1] == '\n') {
+					    novo.descricao[len - 1] = '\0';
+					}
+                    int conflito;
                     do {
+                    	conflito = 0;
                         printf("Localizacao (Ex: AB1): "); scanf("%s", novo.localizacao);
+                        int i;
+                        for (i = 0; i<2; i++) {
+							novo.localizacao[i] = toupper(novo.localizacao[i]);
+						}
                         if (!valida_localizacao(novo.localizacao)) {
                             printf("\nLocalizacao invalida. Tente novamente.\n");
+                            conflito=1;
+                            continue;
                         }
-                    } while (!valida_localizacao(novo.localizacao));
+                        char pn_desc[100];
+                         NoLocalizacao *aux = fila_loc;
+					    while (aux) {
+					        if (strcmp(aux->localizacao, novo.localizacao) == 0) {
+					            int pn_existente = aux->fila_lotes.inicio->dado.part_number;
+					            strcpy(pn_desc, aux->fila_lotes.inicio->dado.descricao);
+					            if (pn_existente != novo.part_number) {
+					                printf("\nLocalizacao ja preenchida por outro item (Part Number %d - %s). Escolha outra.\n\n", pn_existente, pn_desc);
+					                conflito = 1;
+					                break;
+					            }
+					        }
+					        aux = aux->prox;
+   						}
+                    } while (conflito);
                 }
                 resultado = busca_arvore(arvore, novo.part_number);
 				if(resultado && !fila_vazia(&resultado->fila_lotes)){
@@ -134,7 +162,6 @@ void menu(Lista *lista, Arvore *arvore) {
                 fim = clock();
                 printf("Inserido na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
                 
-                // Inserir na fila de localizações
                 insere_fila_localizacoes(&fila_loc, novo.localizacao, novo);
 
             break;
