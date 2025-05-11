@@ -55,8 +55,8 @@ void exibe_arvore(Arvore a) {
   if (!a)
     return;
   exibe_arvore(a->esq);
-  printf("PartNumber: %d\n", a->part_number);
-  exibe_fila(&a->fila_lotes);
+  //printf("PartNumber: %d\n", a->part_number);
+  //exibe_fila(&a->fila_lotes);
   exibe_arvore(a->dir);
 }
 

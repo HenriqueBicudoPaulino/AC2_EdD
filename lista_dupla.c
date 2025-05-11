@@ -67,8 +67,8 @@ int descarta_item_lista(Lista *l, int part_number, int quantidade) {
 void exibe_lista(Lista *l) {
   NoLista *aux = *l;
   while (aux) {
-    printf("PartNumber: %d\n", aux->part_number);
-    exibe_fila(&aux->fila_lotes);
+    //printf("PartNumber: %d\n", aux->part_number);
+    //exibe_fila(&aux->fila_lotes);
     aux = aux->prox;
   }
 }

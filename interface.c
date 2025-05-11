@@ -37,11 +37,17 @@ void menu(Lista *lista, Arvore *arvore) {
 				printf("                ESTOQUE                 \n");
 				printf("========================================\n");
         		
-				printf("\nExibindo Estoque na Lista:\n");
+				//printf("\nExibindo Estoque na Lista:\n");
+				ini = clock();
                 exibe_lista(lista);
+                fim = clock();
+                printf("\nTempo Lista: %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
                 
-                printf("\nExibindo Estoque na Arvore:\n");
+                //printf("\nExibindo Estoque na Arvore:\n");
+                ini = clock();
                 exibe_arvore(*arvore);
+                fim = clock();
+                printf("Tempo Arvore: %.5lfs\n\n", (double)(fim - ini) / CLOCKS_PER_SEC);
                 
                 printf("\nExibindo Estoque por Localizacao:\n");
                 exibe_fila_localizacoes(&fila_loc);
@@ -88,8 +94,10 @@ void menu(Lista *lista, Arvore *arvore) {
                 if (existente_lista && existente_arvore) {
                     strcpy(novo.descricao, existente_lista->fila_lotes.inicio->dado.descricao);
                     strcpy(novo.localizacao, existente_lista->fila_lotes.inicio->dado.localizacao);
+                    novo.shelf_life = existente_lista->fila_lotes.inicio->dado.shelf_life;
                     printf("Descricao (preenchida automaticamente): %s\n", novo.descricao);
                     printf("Localizacao (preenchida automaticamente): %s\n", novo.localizacao);
+                    printf("ShelfLife (preenchida automaticamente): %d\n", novo.shelf_life);
                 } else {
                     printf("Descricao: "); scanf("%s", novo.descricao);
                     do {
