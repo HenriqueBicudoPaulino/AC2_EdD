@@ -3,12 +3,14 @@
 
 #include "item.h"
 
-typedef struct no_fila {
+typedef struct no_fila
+{
   Item dado;
   struct no_fila *prox;
 } NoFila;
 
-typedef struct {
+typedef struct
+{
   NoFila *inicio;
   NoFila *fim;
 } Fila;
