@@ -78,8 +78,7 @@ void teste_massivo(Lista *lista, Arvore *arvore, FilaLocalizacoes *fila_loc)
     // Testes adicionais para verificar o funcionamento
     int part_numbers_teste[] = {1, total_prateleiras / 2, total_prateleiras}; // Testa o primeiro, intermediário e último part_number
     int num_testes = sizeof(part_numbers_teste) / sizeof(part_numbers_teste[0]);
-
-    for (int i = 0; i < num_testes; i++)
+    for (i = 0; i < num_testes; i++)
     {
         int part_number_teste = part_numbers_teste[i];
 

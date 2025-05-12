@@ -8,5 +8,4 @@
 
 void menu(Lista *lista, Arvore *arvore);
 void limparConsole();
-
 #endif

@@ -34,17 +34,6 @@ int insere_fila_localizacoes(FilaLocalizacoes *l, char *localizacao, Item item)
     return 1;
 }
 
-void exibe_fila_localizacoes(FilaLocalizacoes *l)
-{
-    NoLocalizacao *aux = *l;
-    while (aux)
-    {
-        printf("Localizacao: %s\n", aux->localizacao);
-        exibe_fila(&aux->fila_lotes);
-        aux = aux->prox;
-    }
-}
-
 void libera_fila_localizacoes(FilaLocalizacoes *l)
 {
     NoLocalizacao *aux;

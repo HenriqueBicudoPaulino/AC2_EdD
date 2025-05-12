@@ -27,6 +27,8 @@ void exibe_fila(Fila *f);
 
 void libera_fila(Fila *f);
 
+int quantidade_total_fila(Fila *f);
+
 Item *busca_na_fila(Fila *f, int quantidade_necessaria);
 
 #endif
