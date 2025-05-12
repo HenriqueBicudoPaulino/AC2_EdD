@@ -4,7 +4,8 @@
 #include "fila.h"
 #include <string.h>
 
-typedef struct no_localizacao {
+typedef struct no_localizacao
+{
     char localizacao[4];
     Fila fila_lotes;
     struct no_localizacao *prox, *ant;

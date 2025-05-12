@@ -3,7 +3,8 @@
 
 #include "fila.h"
 
-typedef struct no_lista {
+typedef struct no_lista
+{
   int part_number;
   Fila fila_lotes;
   struct no_lista *prox, *ant;
@@ -28,4 +29,3 @@ void exibe_lista(Lista *l);
 void libera_lista(Lista *l);
 
 #endif
-

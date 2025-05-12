@@ -25,7 +25,7 @@ void teste_massivo(Lista *lista, Arvore *arvore, FilaLocalizacoes *fila_loc)
     const int total_prateleiras = 26 * 26 * 10; // Total de localizações: 6.760 (A-Z A-Z 0-9)
     int itens_por_local;
 
-    printf("\nNúmero de itens por localização: ");
+    printf("\nNumero de itens por localizacao: ");
     scanf("%d", &itens_por_local); // Número de itens por localização
 
     int i, j;

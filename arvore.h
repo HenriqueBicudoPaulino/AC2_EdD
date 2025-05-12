@@ -3,7 +3,8 @@
 
 #include "fila.h"
 
-typedef struct no_arvore {
+typedef struct no_arvore
+{
   int part_number;
   Fila fila_lotes;
   struct no_arvore *esq, *dir;
@@ -26,4 +27,3 @@ void exibe_arvore(Arvore a);
 void libera_arvore(Arvore *a);
 
 #endif
-
