@@ -71,3 +71,16 @@ Item *busca_na_fila(Fila *f, int quantidade_necessaria)
   }
   return NULL;
 }
+
+int quantidade_total_fila(Fila *f)
+{
+  int total = 0;
+  NoFila *aux = f->inicio;
+  while (aux)
+  {
+    if (aux->dado.flag == 1 && esta_valido(aux->dado))
+      total += aux->dado.quantidade;
+    aux = aux->prox;
+  }
+  return total;
+}

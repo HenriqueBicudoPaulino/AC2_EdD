@@ -38,20 +38,43 @@ int insere_arvore(Arvore *a, int part_number, Item item)
 int utiliza_item_arvore(Arvore *a, int part_number, int quantidade)
 {
   NoArvore *no = busca_arvore(a, part_number);
-  if (!no)
+  if (!no || fila_vazia(&no->fila_lotes))
     return 0;
+
+  // Verifica se a quantidade solicitada é maior que o total disponível
+  int total_disponivel = quantidade_total_fila(&no->fila_lotes);
+  if (quantidade > total_disponivel)
+    return 0;
+
+  // Processa os lotes, reduzindo quantidades e removendo lotes vazios
+  int qtd_restante = quantidade;
   NoFila *aux = no->fila_lotes.inicio;
-  while (aux && quantidade > 0)
+  while (aux && qtd_restante > 0)
   {
     if (aux->dado.flag == 1 && esta_valido(aux->dado))
     {
-      int usar = (aux->dado.quantidade < quantidade) ? aux->dado.quantidade : quantidade;
+      int usar = (aux->dado.quantidade < qtd_restante) ? aux->dado.quantidade : qtd_restante;
       aux->dado.quantidade -= usar;
-      quantidade -= usar;
+      qtd_restante -= usar;
+
+      // Se a quantidade do lote for zero, remove o lote
+      if (aux->dado.quantidade == 0)
+      {
+        Item temp;
+        desenfileira(&no->fila_lotes, &temp);
+        aux = no->fila_lotes.inicio; // Atualiza o ponteiro após remoção
+      }
+      else
+      {
+        aux = aux->prox;
+      }
     }
-    aux = aux->prox;
+    else
+    {
+      aux = aux->prox;
+    }
   }
-  return quantidade == 0;
+  return qtd_restante == 0;
 }
 
 int descarta_item_arvore(Arvore *a, int part_number, int quantidade)
@@ -64,8 +87,6 @@ void exibe_arvore(Arvore a)
   if (!a)
     return;
   exibe_arvore(a->esq);
-  // printf("PartNumber: %d\n", a->part_number);
-  // exibe_fila(&a->fila_lotes);
   exibe_arvore(a->dir);
 }
 

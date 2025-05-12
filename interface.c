@@ -53,12 +53,10 @@ void menu(Lista *lista, Arvore *arvore)
 			printf("                ESTOQUE                 \n");
 			printf("========================================\n");
 
-			// printf("\nExibindo Estoque na Lista:\n");
 			ini_lista = clock();
 			exibe_lista(lista);
 			fim_lista = clock();
 
-			// printf("\nExibindo Estoque na Arvore:\n");
 			ini_arvore = clock();
 			exibe_arvore(*arvore);
 			fim_arvore = clock();
@@ -92,6 +90,7 @@ void menu(Lista *lista, Arvore *arvore)
 			{
 				printf("Item encontrado:\n");
 				Item result_arvore = resultado_arvore->fila_lotes.inicio->dado;
+				result_arvore.quantidade = quantidade_total_fila(&resultado_arvore->fila_lotes);
 				imprime_item(result_arvore);
 			}
 			else
@@ -210,29 +209,44 @@ void menu(Lista *lista, Arvore *arvore)
 			printf("               UTILIZAR                 \n");
 			printf("========================================\n");
 
-			printf("\nDigite Part Number:");
+			printf("\nDigite Part Number: ");
 			scanf("%d", &part_number);
 			resultado = busca_arvore(arvore, part_number);
-			if (resultado && resultado->fila_lotes.inicio)
+			if (resultado && !fila_vazia(&resultado->fila_lotes))
 			{
+				int total_disponivel = quantidade_total_fila(&resultado->fila_lotes);
 				Item result = resultado->fila_lotes.inicio->dado;
-				printf("Esse item possui %d unidades.", result.quantidade);
+				result.quantidade = total_disponivel;
+				printf("Esse item possui %d unidades.\n", total_disponivel);
 
 				printf("\nDigite a Quantidade a ser utilizada: ");
 				scanf("%d", &quantidade);
 
+				if (quantidade > total_disponivel)
+				{
+					printf("Erro: Quantidade solicitada (%d) excede o total disponivel (%d).\n", quantidade, total_disponivel);
+					break;
+				}
+
 				ini = clock();
-				utiliza_item_lista(lista, part_number, quantidade);
+				int sucesso_lista = utiliza_item_lista(lista, part_number, quantidade);
 				fim = clock();
 				printf("\nUtilizado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
 
 				ini = clock();
-				utiliza_item_arvore(arvore, part_number, quantidade);
+				int sucesso_arvore = utiliza_item_arvore(arvore, part_number, quantidade);
 				fim = clock();
 				printf("Utilizado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
 
-				result = resultado->fila_lotes.inicio->dado;
-				printf("Nova quantidade: %d\n", result.quantidade);
+				if (sucesso_lista && sucesso_arvore)
+				{
+					int nova_quantidade = quantidade_total_fila(&resultado->fila_lotes);
+					printf("Nova quantidade: %d\n", nova_quantidade);
+				}
+				else
+				{
+					printf("Erro ao utilizar o item.\n");
+				}
 			}
 			else
 			{
@@ -249,30 +263,46 @@ void menu(Lista *lista, Arvore *arvore)
 			printf("\nDigite o Part Number: ");
 			scanf("%d", &part_number);
 			resultado = busca_arvore(arvore, part_number);
-			if (resultado && resultado->fila_lotes.inicio)
+			if (resultado && !fila_vazia(&resultado->fila_lotes))
 			{
+				int total_disponivel = quantidade_total_fila(&resultado->fila_lotes);
 				Item result = resultado->fila_lotes.inicio->dado;
-				printf("Esse item possui %d unidades.", result.quantidade);
+				result.quantidade = total_disponivel;
+				printf("Esse item possui %d unidades.\n", total_disponivel);
+
 				printf("\nDigite a quantidade a ser descartada: ");
 				scanf("%d", &quantidade);
+
+				if (quantidade > total_disponivel)
+				{
+					printf("Erro: Quantidade solicitada (%d) excede o total disponivel (%d).\n", quantidade, total_disponivel);
+					break;
+				}
+
 				ini = clock();
-				descarta_item_lista(lista, part_number, quantidade);
+				int sucesso_lista = descarta_item_lista(lista, part_number, quantidade);
 				fim = clock();
 				printf("\nDescartado na Lista em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
 
 				ini = clock();
-				descarta_item_arvore(arvore, part_number, quantidade);
+				int sucesso_arvore = descarta_item_arvore(arvore, part_number, quantidade);
 				fim = clock();
 				printf("Descartado na Arvore em %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
 
-				result = resultado->fila_lotes.inicio->dado;
-				printf("Nova quantidade: %d\n", result.quantidade);
+				if (sucesso_lista && sucesso_arvore)
+				{
+					int nova_quantidade = quantidade_total_fila(&resultado->fila_lotes);
+					printf("Nova quantidade: %d\n", nova_quantidade);
+				}
+				else
+				{
+					printf("Erro ao descartar o item.\n");
+				}
 			}
 			else
 			{
 				printf("Item nao encontrado ou fila vazia.\n");
 			}
-
 			break;
 		}
 		case 6:
@@ -287,7 +317,6 @@ void menu(Lista *lista, Arvore *arvore)
 			getchar(); // Aguarda Enter
 			break;
 		}
-
 		case 0:
 		{
 			printf("\n\nEncerrando...\n\n");
