@@ -20,7 +20,10 @@ void gerar_localizacao(char *loc, int idx) {
 void teste_massivo(Lista *lista, Arvore *arvore, FilaLocalizacoes *fila_loc) {
     // Constantes configuráveis
     const int total_prateleiras = 26 * 26 * 10; // Total de localizações: 17.576 (A-Z A-Z 0-9)
-    const int itens_por_local = 100;            // Número de itens por localização
+    int itens_por_local;
+
+    printf("\nQuantos itens você quer colocar em cada prateleira?");
+    scanf("%d", &itens_por_local); // Número de itens por localização
 
     int i, j;
     clock_t ini, fim;
