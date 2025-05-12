@@ -6,10 +6,19 @@
 #include "interface.h"
 #include "item.h"
 #include "fila_localizacoes.h"
+#include "teste_massivo.h"
+
+void limparConsole() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
 
 void menu(Lista *lista, Arvore *arvore) {
     int opcao, part_number, quantidade;
-    clock_t ini, fim;
+    clock_t ini, fim, ini_lista, fim_lista, ini_arvore, fim_arvore;
     Item novo;
     FilaLocalizacoes fila_loc;
 
@@ -24,6 +33,7 @@ void menu(Lista *lista, Arvore *arvore) {
 		printf("3 - Inserir\n");
 		printf("4 - Utilizar\n");
 		printf("5 - Descartar\n");
+		printf("6 - Teste massivo\n");
 		printf("0 - Sair\n");
 		printf("Selecione uma opcao: ");
 
@@ -33,29 +43,29 @@ void menu(Lista *lista, Arvore *arvore) {
 
         switch (opcao) {
         	case 1:
-        		system("cls");
+        		limparConsole();
             	printf("========================================\n");
 				printf("                ESTOQUE                 \n");
 				printf("========================================\n");
         		
 				//printf("\nExibindo Estoque na Lista:\n");
-				ini = clock();
+				ini_lista = clock();
                 exibe_lista(lista);
-                fim = clock();
-                printf("\nTempo Lista: %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+                fim_lista = clock();
                 
                 //printf("\nExibindo Estoque na Arvore:\n");
-                ini = clock();
+                ini_arvore = clock();
                 exibe_arvore(*arvore);
-                fim = clock();
-                printf("Tempo Arvore: %.5lfs\n\n", (double)(fim - ini) / CLOCKS_PER_SEC);
+                fim_arvore = clock();
                 
                 printf("\nExibindo Estoque por Localizacao:\n");
                 exibe_fila_localizacoes(&fila_loc);
+                printf("\nTempo Lista: %.5lfs\n", (double)(fim_lista - ini_lista) / CLOCKS_PER_SEC);
+                printf("\nTempo Arvore: %.5lfs\n\n", (double)(fim_arvore - ini_arvore) / CLOCKS_PER_SEC);
         	break;
 
             case 2:
-            	system("cls");
+            	limparConsole();
             	printf("========================================\n");
 				printf("                BUSCAR                  \n");
 				printf("========================================\n");
@@ -63,7 +73,7 @@ void menu(Lista *lista, Arvore *arvore) {
                 scanf("%d", &part_number);
 
                 ini = clock();
-                NoLista *resultado_lista = busca_lista(lista, part_number);
+                busca_lista(lista, part_number);
                 fim = clock();
                 printf("\nTempo Lista: %.5lfs\n", (double)(fim - ini) / CLOCKS_PER_SEC);
 
@@ -77,13 +87,12 @@ void menu(Lista *lista, Arvore *arvore) {
                     Item result_arvore = resultado_arvore->fila_lotes.inicio->dado;
                     imprime_item(result_arvore);
                 } else {
-                    printf("Item nao encontrado na lista ou fila vazia.\n");
                     printf("Item nao encontrado ou fila vazia.\n");
                 }
             break;
 
             case 3:
-            	system("cls");
+				limparConsole();
             	printf("========================================\n");
 				printf("               INSERIR                  \n");
 				printf("========================================\n");
@@ -167,7 +176,7 @@ void menu(Lista *lista, Arvore *arvore) {
             break;
 
             case 4:
-            	system("cls");
+            	limparConsole();
             	printf("========================================\n");
 				printf("               UTILIZAR                 \n");
 				printf("========================================\n");
@@ -201,7 +210,7 @@ void menu(Lista *lista, Arvore *arvore) {
             break;
 
             case 5:
-            	system("cls");
+            	limparConsole();
             	printf("========================================\n");
 				printf("               DESCARTAR                \n");
 				printf("========================================\n");
@@ -231,6 +240,17 @@ void menu(Lista *lista, Arvore *arvore) {
 				}
 
             break;
+
+			case 6:
+                limparConsole();
+                printf("========================================\n");
+                printf("             TESTE MASSIVO              \n");
+                printf("========================================\n");
+                teste_massivo(lista, arvore, &fila_loc);
+                printf("Pressione Enter para continuar...");
+                getchar(); // Limpa o buffer
+                getchar(); // Aguarda Enter
+                break;
 
             case 0:
                 printf("\n\nEncerrando...\n\n");

@@ -3,9 +3,11 @@
 
 #include "arvore.h"
 #include "lista_dupla.h"
+#include "fila_localizacoes.h"
 #include <time.h>
 
 void menu(Lista *lista, Arvore *arvore);
+void limparConsole();
+void aaaa();
 
 #endif
-

@@ -8,7 +8,7 @@ int esta_valido(Item item) {
     int dia, mes, ano;
 
     if (sscanf(item.data_entrada, "%d/%d/%d", &dia, &mes, &ano) != 3) {
-        fprintf(stderr, "Data inválida: %s\n", item.data_entrada);
+        fprintf(stderr, "Data invï¿½lida: %s\n", item.data_entrada);
         return 0;
     }
 
@@ -48,6 +48,6 @@ int valida_localizacao(char *localizacao) {
     if (strlen(localizacao) != 3) return 0;
     if (localizacao[0] < 'A' || localizacao[0] > 'Z') return 0;
     if (localizacao[1] < 'A' || localizacao[1] > 'Z') return 0;
-    if (localizacao[2] < '1' || localizacao[2] > '9') return 0;
+    if (localizacao[2] < '0' || localizacao[2] > '9') return 0;
     return 1;
 }
